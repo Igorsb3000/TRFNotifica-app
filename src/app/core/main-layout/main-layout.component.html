@@ -1,0 +1,61 @@
+<!--
+<p-menubar>
+  <ng-template pTemplate="start">
+    <a>
+      <img src="assets/TRFNotifica_logo.png" alt="Logo do Sistema TRFNotifica" style="width: 200px; height: auto;">
+    </a>
+  </ng-template>
+
+
+  <ng-template pTemplate="end">
+    <ng-container class="menu-item" >
+      <div>
+        <img class="icon" src="{{ itens[0].icon }}" alt="{{ itens[0].label }}" style="width: 40px; height: auto;">
+        <span class="label">{{ itens[0].label }}</span>
+      </div>
+    </ng-container>
+    <ng-container class="menu-item" >
+      <div>
+        <img class="icon" src="{{ itens[0].icon }}" alt="{{ itens[0].label }}" style="width: 40px; height: auto;">
+        <span class="label">{{ itens[0].label }}</span>
+      </div>
+    </ng-container>
+    <ng-container class="menu-item" >
+      <div>
+        <img class="icon" src="{{ itens[0].icon }}" alt="{{ itens[0].label }}" style="width: 40px; height: auto;">
+        <span class="label">{{ itens[0].label }}</span>
+      </div>
+    </ng-container>
+    <a class="menu-item" style="margin-right: 1rem;">
+      <img src="{{ itens[3].icon }}" alt="{{ itens[3].label }}" style="width: 40px; height: auto;">
+    </a>
+
+  </ng-template>
+
+
+
+  <ng-template pTemplate="item" let-item let-root="root" >
+    <a style="margin-left: 10rem;">
+      <img src="{{item.icon}}" alt="{{item.label}}" style="width: 40px; height: auto;">
+    </a>
+  </ng-template>
+
+
+
+  <ng-template ngFor let-item [ngForOf]="itens" >
+    <a>
+      <img src="{{item.icon}}" alt="{{item.label}}" style="width: 40px; height: auto;">
+    </a>
+  </ng-template>
+</p-menubar>
+-->
+<p-menubar [model]="menuItens">
+  <ng-template pTemplate="start">
+    <a>
+      <img src="assets/TRFNotifica_logo.png" alt="Logo do Sistema TRFNotifica" style="width: 200px; height: auto;">
+    </a>
+  </ng-template>
+</p-menubar>
+<router-outlet></router-outlet>
+
+

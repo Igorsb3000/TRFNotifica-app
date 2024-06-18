@@ -1,0 +1,49 @@
+
+
+
+<div class="flex flex-column align-items-center" style="margin-top: 3rem;">
+  <h1 style="margin-bottom: 2rem;">Consulta Processual</h1>
+
+
+  <form>
+    <div class="flex flex-column gap-3">
+      <div class="field-checkbox">
+          <p-radioButton
+              name="searchOption"
+              value="numero"
+              [(ngModel)]="searchOption"
+              (onClick)="limparCampos()"
+          />
+          <div style="margin-bottom: 1rem; margin-left: 1rem;">
+            <label for="input1">Nº do Processo</label>
+            <p-inputMask mask="9999999-99.9999.9.99.9999" placeholder="9999999-99.9999.9.99.9999" [disabled]="(searchOption !== 'numero')" type="text" id="input1" name="input1" [(ngModel)]="numeroProcesso"/>
+          </div>
+
+      </div>
+      <div class="field-checkbox">
+        <p-radioButton
+              name="searchOption"
+              value="classeEOrgao"
+              [(ngModel)]="searchOption"
+              (onClick)="limparCampos()"
+          />
+          <div style="margin-bottom: 1rem; margin-left: 1rem;" class="form-group-row">
+              <div>
+                <label for="input2">Código da Classe</label>
+                <p-inputMask mask="9999" placeholder="9999" [disabled]="(searchOption !== 'classeEOrgao')" type="text" id="input2" name="input2" [(ngModel)]="codigoClasse"/>
+              </div>
+
+              <div>
+                <label for="input3">Código do Órgão Julgador</label>
+                <p-inputMask mask="99999" placeholder="99999" [disabled]="(searchOption !== 'classeEOrgao')" type="text" id="input3" name="input3" [(ngModel)]="codigoOrgaoJulgador"/>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem;">
+      <p-button type="submit" label="Buscar" (onClick)="buscar()"></p-button>
+    </div>
+  </form>
+
+</div>

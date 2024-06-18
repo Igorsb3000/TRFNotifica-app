@@ -1,0 +1,30 @@
+<div class="second-field-margin-top" style="display: flex; justify-content: center; margin-bottom: 50px;">
+  <img src="../../../../assets/TRFNotifica_logo.png" alt="Logo do Sistema" style="width: 250px; height: auto;">
+</div>
+<p-card  header="Login" [style]="{'text-align': 'center', 'margin': 'auto', width: '360px'}">
+  <div class="p-fluid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+
+      <div class="field first-field-margin-top">
+        <p-floatLabel>
+          <input id="username" type="text" pInputText [(ngModel)]="username" />
+          <label for="username">Username</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field second-field-margin-top">
+        <p-floatLabel>
+          <p-password id="password" type="password"  [(ngModel)]="password" [toggleMask]="true" [feedback]="false"/>
+          <label for="password">Password</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="field second-field-margin-top">
+        <button pButton type="button" label="Entrar" class="w-full" (click)="onLogin()"></button>
+      </div>
+    </div>
+  </div>
+</p-card>
+
+
+
