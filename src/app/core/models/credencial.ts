@@ -8,3 +8,18 @@ export interface IUsuario {
   token: string;
 }
 
+export interface IUsuarioCadastro {
+  name: string;
+  email: string;
+  username : string;
+  password: string;
+}
+
+export interface IUsuarioAtualizacao {
+  name: string;
+  email: string;
+  username : string;
+  password: string;
+  newPassword: string;
+}
+

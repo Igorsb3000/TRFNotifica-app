@@ -1,5 +1,5 @@
 export interface IBuscaProcessoRequestDTO {
   numeroProcesso: string | undefined;
-  codigoClasse: number | undefined;
-  codigoOrgaoJulgador: number | undefined;
+  classeCodigo: number | undefined;
+  orgaoJulgadorCodigo: number | undefined;
 }

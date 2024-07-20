@@ -10,3 +10,13 @@
   width: 100%;
 }
 
+.red-text{
+  color: red;
+}
+
+.responsive-image {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  align-self: flex-end;
+}

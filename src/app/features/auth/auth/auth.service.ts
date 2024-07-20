@@ -7,6 +7,7 @@ import { ICredencial, IUsuario } from '../../../core/models/credencial';
 import { BaseService } from '../../../core/base/base.service';
 import { environment } from '../../../environments/environments';
 import { Crypter } from '../../../utils/crypto.util';
+import { jwtDecode } from 'jwt-decode';
 
 
 @Injectable({
@@ -21,8 +22,7 @@ export class AuthService extends BaseService{
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(
-    private ngZone: NgZone,
-    private router: Router
+    private router: Router,
   ) {super()}
 
   async login(credencial : ICredencial){
@@ -37,17 +37,14 @@ export class AuthService extends BaseService{
     try {
       const payload = await firstValueFrom(this.httpObj().post<any>(this.URL, null, httpOptions));
 
-      console.log(btoa(`${credencial.username}:${credencial.password}`))
-
       const user =  {
         'usuario': credencial.username,
         'token': payload['token'],
       } as IUsuario;
 
-      localStorage.clear();
       localStorage.setItem(environment.auth, JSON.stringify(user));
       this.isAuthenticatedSubject.next(true);
-      this.irPaginaInicial();
+      this.redirectAfterLogin();
     } catch (error) {
       console.log(error);
       throw error;
@@ -65,31 +62,76 @@ export class AuthService extends BaseService{
   }
 
   irPaginaInicial(){
-    this.ngZone.run(() => {
-      this.router.navigate([AuthConst.PAGINA_INICIAL]);
-    });
+    const redirectUrl = this.getRedirectUrl() || '/';
+    this.router.navigate([redirectUrl]);
   }
 
-  logoff(){
-    localStorage.clear();
-    this.irPaginaLogin();
+  irPaginaLogin(): void {
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('search-results') || currentUrl.includes('process-details') || currentUrl.includes('my-processes')) {
+      this.setRedirectUrl(currentUrl);
+    }
+    this.router.navigate(['/login']);
   }
 
-  irPaginaLogin(){
-    localStorage.clear();
-    this.ngZone.run(() => {
-      this.router.navigate([AuthConst.PAGINA_LOGIN]);
-    });
-
+  setRedirectUrl(url: string): void {
+    localStorage.setItem('redirectUrl', url);
   }
-  /*login() {
-    localStorage.setItem('AUTH_TRFNotifica', 'your-auth-token');
-    this.isAuthenticatedSubject.next(true);
-  }*/
 
   logout() {
-    localStorage.removeItem('AUTH_TRFNotifica');
+    localStorage.clear();
     this.isAuthenticatedSubject.next(false);
+    this.irPaginaInicial();
+  }
+
+  checkAuthentication() {
+    const auth = localStorage.getItem('AUTH_TRFNotifica');
+
+    if (auth) {
+      const authData = JSON.parse(auth);
+      const token = authData.token;
+
+      if (token && !this.isTokenExpired(token)) {
+        this.isAuthenticatedSubject.next(true);
+        return true;
+      } else {
+        localStorage.clear();
+        this.isAuthenticatedSubject.next(false);
+        return false;
+      }
+    } else {
+      localStorage.clear();
+      this.isAuthenticatedSubject.next(false);
+      return false;
+    }
+  }
+
+
+  isTokenExpired(token: string): boolean {
+    try {
+      const decodedToken: any = jwtDecode(token);
+      const expirationDate = new Date(0);
+      expirationDate.setUTCSeconds(decodedToken.exp);
+      return expirationDate < new Date();
+    } catch (error) {
+      console.error('Error decoding token', error);
+      return true;
+    }
+  }
+
+  redirectAfterLogin(): void {
+    const redirectUrl = this.getRedirectUrl();
+    if (redirectUrl) {
+      this.router.navigateByUrl(redirectUrl);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
+  getRedirectUrl(): string | null {
+    const url = localStorage.getItem('redirectUrl');
+    localStorage.removeItem('redirectUrl');
+    return url;
   }
 
 }

@@ -1,1 +1,103 @@
-<p>search-results works!</p>
+<div style="margin-top: 1rem; margin-bottom: 1rem;">
+  <p-button icon="pi pi-arrow-left" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="goBack()" label="Voltar" aria-label="Voltar"></p-button>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; margin-bottom: 1rem;">
+  <h3>
+    Resultado da Busca
+  </h3>
+  <p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOrder" (onChange)="onSortChange($event)" placeholder="Ordenar por"></p-dropdown>
+</div>
+<!--
+<h3>
+  Resultado da busca
+</h3>
+<p-dropdown [options]="sortOptions" [(ngModel)]="selectedSortOrder" (onChange)="onSortChange($event)"></p-dropdown>
+-->
+@if(isLoading){
+  <div class="center-spinner">
+    <p-progressSpinner aria-label="Carregando"></p-progressSpinner>
+  </div>
+} @else {
+  <h4>Total: {{totalResults}} resultado(s) encontrado(s)</h4>
+
+  @if(data === null || data === undefined || data.length === 0){
+    <div style="text-align: center; margin-top: 2rem;">
+      <img src="../../../assets/search_not_found.png" alt="Imagem de nenhum resultado encontrado" style="width: 150px; height: auto;">
+      <h4>Nenhum resultado encontrado!</h4>
+    </div>
+
+  } @else {
+    <p-confirmDialog [style]="{width: '40rem'}" rejectButtonStyleClass="p-button-outlined p-button-danger"></p-confirmDialog>
+    <p-toast position="top-center"/>
+    <p-table [value]="displayedData" [tableStyle]="{ 'min-width': '80rem' }" aria-label="Tabela de resultados de busca">
+      <!--
+      [value]="displayedData" [paginator]="true" [rows]="size" [totalRecords]="totalResults" [first]="currentPage * size" [showFirstLastIcon]="false" (onPage)="onLoadMore($event)"
+      -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <strong>Nº do Processo</strong>
+          </th>
+          <th>
+            <strong>Tribunal</strong>
+          </th>
+          <th>
+            <strong>Assuntos</strong>
+          </th>
+          <th>
+            <strong>Última Atualização</strong>
+          </th>
+          <th>
+            <strong>Ações</strong>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-processo>
+        <tr>
+          <td>{{ processo._source.numeroProcesso }}</td>
+          <td>{{ processo._source.tribunal }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let assunto of processo._source.assuntos">{{ assunto.nome }}</li>
+            </ul>
+          </td>
+          <td>
+            {{ processo._source.movimentos?.length ? (processo._source.movimentos[processo._source.movimentos.length - 1]?.dataHora | date: 'dd/MM/yyyy - HH:mm:ss') : 'Sem movimentações' }}
+          </td>
+          <td>
+            <p-button
+              aria-label="Exibir detalhes do processo"
+              icon="pi pi-eye"
+              class="action-button"
+              (onClick)="onVisualizeDetails(processo._source.id)"
+            ></p-button>
+            <p-button
+              aria-label="Ativar ou desativar notificação"
+              [icon]="notificationStates[processo._source.id] ? 'pi pi-bell-slash' : 'pi pi-bell'"
+              [severity]="notificationStates[processo._source.id] ? 'danger' : 'success'"
+              class="action-button"
+              (onClick)="toggleNotifications(processo)"
+            ></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      [rows]="size"
+      [totalRecords]="totalResults"
+      [first]="currentPage * size"
+      [pageLinkSize]="1"
+      [showFirstLastIcon]="false"
+      (onPageChange)="onPageChange($event)">
+    </p-paginator>
+
+    <!--
+    <div style="text-align: center; margin-top: 1rem;">
+      <p-button icon="pi pi-refresh" [disabled]="!sortValue" aria-label="Carregar mais resultados" (onClick)="onLoadMore()" label="Carregar Mais"></p-button>
+    </div>
+    -->
+
+  }
+}

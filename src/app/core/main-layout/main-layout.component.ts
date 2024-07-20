@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../features/auth/auth/auth.service';
 import { Subscription } from 'rxjs';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-main-layout',
@@ -8,10 +9,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent implements OnInit{
-
-  isAuthenticated: boolean = false;
-  menuItens: any[] = [];
+  private isAuthenticated: boolean = false;
   private authSubscription: Subscription | undefined;
+  public menuItens: MenuItem[]= [];
 
   constructor(private authService: AuthService){}
 
@@ -30,14 +30,20 @@ export class MainLayoutComponent implements OnInit{
 
   updateMenuItems() {
     this.menuItens = [
-      { label: 'Busca', icon: 'pi pi-fw pi-search', routerLink: ['/home'] },
-      { label: 'Meus processos', icon: 'pi pi-fw pi-bell', routerLink: ['/products'] },
-      { label: 'Perfil', icon: 'pi pi-fw pi-user', routerLink: ['/services'] }
+      { label: 'Busca', icon: 'pi pi-fw pi-search', ariaLabel: 'Buscar', routerLink: ['/search']},
+      { label: 'Meus processos', icon: 'pi pi-fw pi-bell', ariaLabel: 'Meus processos', routerLink: this.isAuthenticated ? ['/my-processes'] : ['/login']},
+      { label: 'Perfil', icon: 'pi pi-fw pi-user', ariaLabel: 'Perfil', routerLink: this.isAuthenticated ?['/profile'] : ['/login']}
     ];
 
     if (this.isAuthenticated) {
-      this.menuItens.push({ label: 'Sair', icon: 'pi pi-fw pi-sign-out', command: () => this.authService.logout() });
+      this.menuItens.push({ label: 'Sair', icon: 'pi pi-fw pi-sign-out', ariaLabel: 'Sair', command: () => this.logout() });
     }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.updateMenuItems();
   }
 
 }

@@ -1,0 +1,96 @@
+<div class="second-field-margin-top" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+  <a routerLink="/search" style="text-decoration: none;">
+    <img src="../../../../assets/TRFNotifica_logo.png" alt="Logo do Sistema" style="width: 250px; height: auto;">
+  </a>
+</div>
+<p-card header="Crie sua conta" [style]="{'color':'#545454', 'background':'#e9e9e9', 'text-align': 'center', 'margin':'auto', width: '30rem'}">
+  <p-toast position="top-center"/>
+  <div class="p-fluid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+    <form [formGroup]="form">
+      <div class="field first-field-margin-top">
+        <p-floatLabel>
+          <input pInputText id="nome" formControlName="nome"/>
+          <label for="nome">Nome Completo <span class="red-text">*</span></label>
+        </p-floatLabel>
+        <div class="custom-message">
+          @if(form.get('nome')?.invalid && (form.get('nome')?.dirty || form.get('nome')?.touched)){
+            @if(form.get('nome')?.errors?.['required']){
+              <p-message
+              severity="danger"
+              text="Este campo é obrigatório"></p-message>
+            }
+          }
+        </div>
+
+      </div>
+      <div class="field second-field-margin-top"> <!--class="form-group"-->
+        <p-floatLabel>
+          <input pInputText id="usuario" formControlName="usuario"/>
+          <label for="usuario">Usuário <span class="red-text">*</span></label>
+        </p-floatLabel>
+        <div class="custom-message">
+          @if(form.get('usuario')?.invalid && (form.get('usuario')?.dirty || form.get('usuario')?.touched)){
+            @if(form.get('usuario')?.errors?.['required']){
+              <p-message
+              severity="danger"
+              text="Este campo é obrigatório"></p-message>
+            }
+          }
+        </div>
+      </div>
+      <div class="field second-field-margin-top">
+        <p-floatLabel>
+          <input pInputText id="email" formControlName="email"/>
+          <label for="email">E-mail <span class="red-text">*</span></label>
+        </p-floatLabel>
+        <div class="custom-message">
+          @if(form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)){
+            @if(form.get('email')?.errors?.['required']){
+              <p-message
+              severity="danger"
+              text="Este campo é obrigatório"></p-message>
+            }
+          }
+        </div>
+      </div>
+      <div class="field second-field-margin-top">
+        <p-floatLabel>
+          <p-password type="password" [toggleMask]="true" [feedback]="false" id="senha" formControlName="senha"/>
+          <label for="senha">Senha <span class="red-text">*</span></label>
+        </p-floatLabel>
+        <div class="custom-message">
+          @if(form.get('senha')?.invalid && (form.get('senha')?.dirty || form.get('senha')?.touched)){
+            @if(form.get('senha')?.errors?.['required']){
+              <p-message
+              severity="danger"
+              text="Este campo é obrigatório"></p-message>
+            }
+          }
+        </div>
+      </div>
+      <div class="field second-field-margin-top">
+        <p-floatLabel>
+          <p-password type="password" [toggleMask]="true" [feedback]="false" id="senhaConfirmacao" formControlName="senhaConfirmacao"/>
+          <label for="senhaConfirmacao">Confirme sua Senha <span class="red-text">*</span></label>
+        </p-floatLabel>
+        <div class="custom-message">
+          @if(form.get('senhaConfirmacao')?.invalid && (form.get('senhaConfirmacao')?.dirty || form.get('senhaConfirmacao')?.touched)){
+            @if(form.get('senhaConfirmacao')?.errors?.['required']){
+              <p-message
+              severity="danger"
+              text="Este campo é obrigatório"></p-message>
+            }
+          }
+        </div>
+      </div>
+      <div class="field second-field-margin-top">
+        <p-button class="w-full" type="submit" [disabled]="!form.valid" (onClick)="onSubmit()" label="Criar Conta" [style]="{'font-weight': 'bold', 'background-color': '#005B99'}"></p-button>
+      </div>
+      <div>
+        <p style="color: black;">Já possui uma conta? <a routerLink="/login" style="color: #005B99; text-decoration: none; font-weight:bold">Faça login</a></p>
+      </div>
+    </form>
+    </div>
+  </div>
+</p-card>

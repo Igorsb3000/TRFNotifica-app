@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { UiPrimengModule } from '../app/core/core/ui-primeng/ui-primeng.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule
     //LoginRoutingModule
     //LoginModule,
   ],
@@ -18,7 +19,8 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     CommonModule,
     RouterModule,
-    UiPrimengModule
+    UiPrimengModule,
+    ReactiveFormsModule
     //oginRoutingModule
     //LoginModule
   ]

@@ -16,6 +16,10 @@ export class AuthConst {
       path: 'login',
       loadChildren: () => import('../../features/auth/login/login.module').then(m => m.LoginModule)
     },
+    {
+      path: 'cadastre',
+      loadChildren: () => import('../../features/user-form/user-form.module').then(m => m.UserFormModule)
+    },
 
   ]
 }

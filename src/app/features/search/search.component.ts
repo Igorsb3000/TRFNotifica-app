@@ -1,8 +1,5 @@
-import { IBuscaProcessoRequestDTO } from '../../core/models/busca-processo-request-dto';
-import { SearchService } from './../search.service';
 import { Component } from '@angular/core';
-import { AuthService } from '../auth/auth/auth.service';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -11,62 +8,65 @@ import { Route, Router } from '@angular/router';
 })
 export class SearchComponent {
   numeroProcesso: string = '';
-  codigoClasse: number = 0;
-  codigoOrgaoJulgador: number = 0;
+  codigoClasse: number | null = null;
+  codigoOrgaoJulgador: number | null = null;
   searchOption: string = '';
   size: number = 10;
   nextTrf: number = 1;
   searchAfter: number | undefined;
+  isLoading: boolean = false;
 
-  //itens: String[] = ['inicio', 'sair'];
-
-  itens: any[] = [
-  { label: 'Busca', icon: 'pi pi-fw pi-search', routerLink: ['/home'] },
-  { label: 'Meus processos', icon: 'pi pi-fw pi-bell', routerLink: ['/products'] },
-  { label: 'Perfil', icon: 'pi pi-fw pi-user', routerLink: ['/services'] },
-  { label: 'sair', icon: 'pi pi-fw pi-sign-out', routerLink: ['/logout'] }
-  ]
-  /*[
-    { label: 'Busca', icon: '../../../assets/lupa_final.png' },
-    { label: 'Processos de Interesse', icon: '../../../assets/documento_notificacao_final.png' },
-    { label: 'Perfil', icon: '../../../assets/perfil_final.png' },
-    { label: '', icon: '../../../assets/sair_final.png' }
-
-  ];*/
   constructor(
-    private authService : AuthService,
-    private searchService: SearchService,
     private router: Router
   ){}
 
   ngOnInit() {
-    //this.username = this.authService.getUsuario().toUpperCase();
+    this.clearFields();
   }
 
-  sair(){
-    this.authService.logoff();
-  }
-
-  imprimir(){
-    console.log(this.searchOption, " : ", this.numeroProcesso, ", ", this.codigoClasse, ", ", this.codigoOrgaoJulgador);
-  }
-  limparCampos() {
+  clearFields() {
     this.numeroProcesso = '';
     this.codigoClasse = 0;
     this.codigoOrgaoJulgador = 0;
   }
 
-  buscar() {
-
-    const buscaProcesso: IBuscaProcessoRequestDTO = {
-      numeroProcesso: this.numeroProcesso.replace(/\D/g, '') || undefined,
-      codigoClasse: this.codigoClasse || undefined,
-      codigoOrgaoJulgador: this.codigoOrgaoJulgador || undefined
-    };
-    console.log("Dados da busca: ", buscaProcesso);
-
-    this.searchService.search(buscaProcesso, this.size, this.nextTrf, this.searchAfter).subscribe(response => {
-      this.router.navigate(['/search-results'], { state: { results: response } });
-    });
+  goToSearchResults() {
+    this.router.navigate(['/search-results'], {
+      queryParams: {
+        numeroProcesso: this.numeroProcesso,
+        codigoClasse: this.codigoClasse,
+        codigoOrgaoJulgador: this.codigoOrgaoJulgador,
+        size: this.size,
+        nextTrf: this.nextTrf,
+        searchAfter: this.searchAfter
+    }});
   }
+
+  setCursorToStart(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    inputElement.setSelectionRange(0, 0);
+  }
+
+  selectRadioButtonNumero(): void {
+    this.searchOption = 'numero';
+    this.clearFields();
+  }
+
+  selectRadioButtonclasseEOrgao(): void {
+    this.searchOption = 'classeEOrgao';
+    this.clearFields();
+  }
+
+  // Verifica se o botão deve ser habilitado
+  get isButtonEnabled(): boolean {
+    if (this.searchOption === 'numero') {
+      return this.numeroProcesso.replace(/\D/g, '').length === 20;
+    } else if (this.searchOption === 'classeEOrgao') {
+      const classeLength = this.codigoClasse ? this.codigoClasse.toString().replace(/\D/g, '').length : 0;
+      const orgaoLength = this.codigoOrgaoJulgador ? this.codigoOrgaoJulgador.toString().replace(/\D/g, '').length : 0;
+      return classeLength >= 1 && orgaoLength >= 1;
+    }
+    return false;
+  }
+
 }
