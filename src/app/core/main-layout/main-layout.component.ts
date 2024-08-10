@@ -1,24 +1,31 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AuthService } from '../../features/auth/auth/auth.service';
+import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css'
+  styleUrls: ['./main-layout.component.css']
 })
-export class MainLayoutComponent implements OnInit{
+export class MainLayoutComponent implements OnInit, OnDestroy, AfterViewChecked {
   private isAuthenticated: boolean = false;
   private authSubscription: Subscription | undefined;
-  public menuItens: MenuItem[]= [];
+  public menuItens: MenuItem[] = [];
+  private updateMenu: boolean = false;
 
-  constructor(private authService: AuthService){}
+  constructor(
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit() {
     this.authSubscription = this.authService.isAuthenticated$.subscribe(isAuthenticated => {
-      this.isAuthenticated = isAuthenticated;
-      this.updateMenuItems();
+      this.ngZone.run(() => {
+        this.isAuthenticated = isAuthenticated;
+        this.updateMenu = true;
+      });
     });
   }
 
@@ -28,22 +35,40 @@ export class MainLayoutComponent implements OnInit{
     }
   }
 
+  ngAfterViewChecked() {
+    if (this.updateMenu) {
+      this.updateMenuItems();
+      this.updateMenu = false;
+
+      // Remove o atributo aria-level dos elementos (garantir 100% acessibilidade)
+      const menuItems = document.querySelectorAll('[aria-level="1"]');
+      menuItems.forEach(item => {
+        item.removeAttribute('aria-level');
+      });
+    }
+  }
+
   updateMenuItems() {
     this.menuItens = [
-      { label: 'Busca', icon: 'pi pi-fw pi-search', ariaLabel: 'Buscar', routerLink: ['/search']},
-      { label: 'Meus processos', icon: 'pi pi-fw pi-bell', ariaLabel: 'Meus processos', routerLink: this.isAuthenticated ? ['/my-processes'] : ['/login']},
-      { label: 'Perfil', icon: 'pi pi-fw pi-user', ariaLabel: 'Perfil', routerLink: this.isAuthenticated ?['/profile'] : ['/login']}
+      { label: 'Consulta', icon: 'pi pi-fw pi-search', routerLink: ['/search'] },
+      { label: 'Meus processos', icon: 'pi pi-fw pi-bell', routerLink: ['/my-processes'] },
+      { label: 'Perfil', icon: 'pi pi-fw pi-user',  routerLink: ['/profile'] }
     ];
 
     if (this.isAuthenticated) {
-      this.menuItens.push({ label: 'Sair', icon: 'pi pi-fw pi-sign-out', ariaLabel: 'Sair', command: () => this.logout() });
+      this.menuItens.push({ label: 'Sair', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() });
+    } else {
+      this.menuItens.push({ label: 'Login', icon: 'pi pi-fw pi-sign-in', routerLink: ['/login'] });
     }
+
+    this.cdr.detectChanges();
   }
 
   logout() {
     this.authService.logout();
-    this.isAuthenticated = false;
-    this.updateMenuItems();
+    this.ngZone.run(() => {
+      this.isAuthenticated = false;
+      this.updateMenu = true;
+    });
   }
-
 }

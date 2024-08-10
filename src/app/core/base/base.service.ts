@@ -7,8 +7,6 @@ export abstract class BaseService {
   protected readonly HEADERS_NOAUTH = new HttpHeaders({ 'Content-Type': 'application/x-www-urlencoded', 'No-Auth': 'True'});
   private http : HttpClient = inject(HttpClient);
 
-  constructor() { }
-
   protected httpObj() : HttpClient {
     return this.http;
   }

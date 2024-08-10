@@ -1,0 +1,89 @@
+<div class="custom-button-goBack">
+  <p-button icon="pi pi-arrow-left" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="goBack()" label="Voltar" aria-label="Voltar"></p-button>
+</div>
+<div class="page-title-process">
+  <h2 style="margin-left: 1rem;" aria-label="Resultado da Busca">
+    Resultado da Busca
+  </h2>
+  <p-dropdown [style]="{'margin-right':'1rem'}"  [options]="sortOptions" [(ngModel)]="selectedSortOrder" (onChange)="onSortChange($event)" placeholder="Ordenar por" ariaLabel="Ordenar por"></p-dropdown>
+</div>
+@if(isLoading){
+  <div class="center-spinner">
+    <p-progressSpinner ariaLabel="Carregando"></p-progressSpinner>
+  </div>
+} @else {
+  <h3 style="margin-left: 1rem;">Total: {{totalResults}} resultado(s) encontrado(s)</h3>
+
+  @if(data === null || data === undefined || data.length === 0){
+    <div class="div-image-error">
+      <img src="../../../assets/search_not_found.png" aria-label="Imagem resultado não encontrado" alt="Nenhum resultado encontrado" class="custom-image-error">
+      <h3 aria-label="Nenhum resultado encontrado!">Nenhum resultado encontrado!</h3>
+    </div>
+
+  } @else {
+    <p-confirmDialog [style]="{width: '40rem'}" rejectButtonStyleClass="p-button-outlined p-button-danger"></p-confirmDialog>
+    <p-toast position="top-center"/>
+    <p-table [value]="displayedData" [tableStyle]="{ 'min-width': '80rem' }" aria-label="Tabela de resultados de busca">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <strong>Nº do Processo</strong>
+          </th>
+          <th>
+            <strong>Tribunal</strong>
+          </th>
+          <th>
+            <strong>Assuntos</strong>
+          </th>
+          <th>
+            <strong>Última Atualização</strong>
+          </th>
+          <th>
+            <strong>Ações</strong>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-processo>
+        <tr>
+          <td>{{ formatProcessNumber(processo._source.numeroProcesso) }}</td>
+          <td>{{ processo._source.tribunal }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let assunto of processo._source.assuntos">{{ assunto.nome }}</li>
+            </ul>
+          </td>
+          <td>
+            {{ processo._source.movimentos?.length ? (processo._source.movimentos[processo._source.movimentos.length - 1]?.dataHora | date: 'dd/MM/yyyy - HH:mm:ss') : 'Sem movimentações' }}
+          </td>
+          <td>
+            <p-button
+              ariaLabel="Exibir detalhes do processo"
+              [styleClass]="'custom-button-blue'"
+              icon="pi pi-eye"
+              class="action-button"
+              (onClick)="onVisualizeDetails(processo._source.id)"
+            ></p-button>
+            <p-button
+              ariaLabel="Ativar/desativar notificação"
+              [icon]="notificationStates[processo._source.id] ? 'pi pi-bell-slash' : 'pi pi-bell'"
+              [styleClass]="notificationStates[processo._source.id] ? 'custom-button-disabled' : 'custom-button-enabled'"
+              class="action-button"
+              (onClick)="toggleNotifications(processo)"
+            ></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-paginator
+      aria-label="Paginação dos resultados"
+      [rows]="size"
+      [totalRecords]="totalResults"
+      [first]="currentPage * size"
+      [pageLinkSize]="1"
+      [showFirstLastIcon]="false"
+      (onPageChange)="onPageChange($event)">
+    </p-paginator>
+  }
+}

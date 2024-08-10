@@ -1,10 +1,9 @@
-<p-menubar [model]="menuItens">
+<p-menubar [model]="menuItens" aria-label="Main Menu">
   <ng-template pTemplate="start">
-    <a routerLink="/search" style="text-decoration: none;">
-      <img src="../../../../assets/TRFNotifica_logo.png" alt="Logo do Sistema" style="width: 250px; height: auto;">
+    <a routerLink="/search" class="custom-image" role="link">
+      <img src="../../../../assets/TRFNotifica_logo.png" alt="Logo do sistema TRFNotifica" class="custom-image-logo">
     </a>
   </ng-template>
 </p-menubar>
+
 <router-outlet></router-outlet>
-
-

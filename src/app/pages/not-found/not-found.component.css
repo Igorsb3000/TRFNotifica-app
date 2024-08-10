@@ -1,0 +1,13 @@
+.custom-margin-block {
+  text-align: center;
+  margin-top: 10rem;
+}
+
+.custom-image {
+  width: 200px;
+  height: auto;
+}
+
+.custom-margin-text {
+  margin-top: 2rem;
+}

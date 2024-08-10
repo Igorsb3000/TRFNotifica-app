@@ -1,0 +1,36 @@
+<div class="second-field-margin-top" style="display: flex; justify-content: center; margin-bottom: 50px;">
+  <a routerLink="/search" class="custom-image">
+    <img src="../../../../assets/TRFNotifica_logo.png" alt="Logo do sistema TRFNotifica" class="custom-image-logo">
+  </a>
+</div>
+<p-card header="Login" [style]="{'color':'#545454', 'background':'#e9e9e9', 'text-align': 'center', 'margin': 'auto', width: '23rem'}" aria-label="Tela de login do TRFNotifica">
+  <p-toast position="top-center"></p-toast>
+  <div class="p-fluid">
+    <div class="p-col-12 p-md-6 p-lg-4">
+      <form [formGroup]="form">
+        <div class="field first-field-margin-top">
+          <p-floatLabel>
+            <input id="username" type="text" pInputText formControlName="username" aria-label="Campo usuário (username)"/>
+            <label for="username" aria-label="Usuário">Usuário</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="field second-field-margin-top">
+          <p-floatLabel>
+            <p-password id="password" type="password" formControlName="password" [toggleMask]="true" [feedback]="false" ariaLabel="Campo senha"/>
+            <label for="password" aria-label="Senha">Senha</label>
+          </p-floatLabel>
+        </div>
+      </form>
+        <div class="field second-field-margin-top">
+          <p-button label="Entrar" [styleClass]="'custom-button-blue'" class="w-full" (click)="onLogin()" aria-label="Botão entrar"></p-button>
+        </div>
+        <div>
+          <p style="color: black;">Não possui uma conta? <a routerLink="/cadastre" class="custom-link" aria-label="Crie sua conta">Crie sua conta</a></p>
+        </div>
+    </div>
+  </div>
+</p-card>
+
+
+

@@ -1,0 +1,110 @@
+<form [formGroup]="form">
+  <p-toast position="top-center" />
+  <h2 class="form-title" aria-label="Perfil">
+    Perfil
+  </h2>
+  <div class="grid-container">
+    <!-- Coluna 1 -->
+    <div class="grid-item">
+
+      <div class="flex flex-column gap-2 input-container">
+        <label aria-label="Nome Completo" for="nome">Nome Completo <span class="red-text">*</span></label>
+        <div class="input-group">
+          <input
+            class="input-space"
+            aria-label="Campo nome"
+            pInputText
+            id="nome"
+            formControlName="nome"
+          />
+          <p-button
+            ariaLabel="Botão habilitar/desabilitar edição"
+            [style]="{'color':'#005b99'}"
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (click)="toggleEditable('nome')"
+          ></p-button>
+        </div>
+      </div>
+      <div class="flex flex-column gap-2 input-container">
+        <label aria-label="E-mail" for="email">E-mail <span class="red-text">*</span></label>
+        <div class="input-group">
+          <input
+            class="input-space"
+            aria-label="Campo e-mail"
+            pInputText
+            id="email"
+            formControlName="email"
+          />
+          <p-button
+            ariaLabel="Botão habilitar/desabilitar edição"
+            [style]="{'color':'#005b99'}"
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (click)="toggleEditable('email')"
+          ></p-button>
+        </div>
+      </div>
+      <div class="flex flex-column gap-2 input-container">
+        <label aria-label="Usuário" for="usuario">Usuário <span class="red-text">*</span></label>
+        <div class="input-group">
+          <input
+            class="input-space"
+            aria-label="Campo usuário"
+            pInputText
+            id="usuario"
+            formControlName="usuario"
+          />
+          <p-button
+            ariaLabel="Botão habilitar/desabilitar edição"
+            [style]="{'color':'#005b99'}"
+            icon="pi pi-pencil"
+            [rounded]="true"
+            [text]="true"
+            (click)="toggleEditable('usuario')"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna 2 -->
+    <div class="grid-item">
+      <div class="flex flex-column gap-2 input-container" >
+        <label aria-label="Senha Atual" for="senhaAtual">Senha Atual</label>
+        <p-password
+          ariaLabel="Campo senha atual"
+          id="senhaAtual"
+          formControlName="senhaAtual"
+          [toggleMask]="true"
+          [feedback]="false"
+        />
+      </div>
+      <div class="flex flex-column gap-2 input-container">
+        <label aria-label="Nova Senha" for="senhaNova">Nova Senha</label>
+        <p-password
+          ariaLabel="Campo nova senha"
+          id="senhaNova"
+          formControlName="senhaNova"
+          [toggleMask]="true"
+          [feedback]="true"
+          promptLabel="Digite uma senha"
+          weakLabel="Fraco"
+          mediumLabel="Médio"
+          strongLabel="Forte"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <p-button
+      [styleClass]="'custom-button-blue'"
+      [disabled]="!form.valid || !isFormModified"
+      (onClick)="onSubmit()"
+      label="Salvar alterações"
+      ariaLabel="Salvar alterações"
+    ></p-button>
+  </div>
+</form>

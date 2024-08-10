@@ -1,5 +1,20 @@
-body {
-  font-family: 'Roboto', sans-serif;
+:root {
+  --font-family: 'Roboto', sans-serif;
+  --font-feature-settings: normal;
+}
+
+body, html {
+  font-family: var(--font-family) !important;
+}
+
+.p-toast {
+  text-align: left !important;
+}
+
+/* Remove a borda dos botoes */
+.p-button:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .custom-message {
@@ -9,14 +24,71 @@ body {
   margin-left: 0%;
 }
 
-.center-spinner{
+.center-spinner {
   display: flex;
   justify-content: center;
 }
 
-/*.card{
-  background-color:#e9e9e9 ;
-  text-align: center;
-  margin: auto;
-  max-width: 480px;
-}*/
+.custom-button-blue {
+  background-color: #005b99;
+  border-color: #005b99;
+  color: white;
+}
+
+.custom-button-enabled {
+  background-color: #008547;
+  border-color: #008547;
+  color: white;
+}
+
+.custom-button-disabled {
+  background-color: #b81414;
+  border-color: #b81414;
+  color: white;
+}
+
+.custom-link {
+  color: #005B99;
+  text-decoration: none;
+  font-weight:bold
+}
+
+.custom-image {
+  text-decoration: none;
+}
+
+.custom-image-error {
+  width: 150px;
+  height: auto;
+}
+
+.div-image-error {
+  text-align: center; margin-top: 2rem;
+}
+
+.custom-button-goBack {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+.page-title-process {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.action-button {
+  margin-right: 8%;
+}
+
+.red-text {
+  color: red;
+}
+
+.custom-image-logo {
+  width: 250px;
+  height: auto;
+}
